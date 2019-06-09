@@ -13,6 +13,7 @@ library(knitr)
 library(kableExtra)
 library(scales)
 library(flextable)
+library(usethis)
 
 ## start with past grants
 
