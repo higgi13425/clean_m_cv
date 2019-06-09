@@ -1,0 +1,61 @@
+---
+title: "Line plots"
+author: "Peter Higgins"
+date: "June 6, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggalt)
+data("AirPassengers")
+library(lubridate)
+```
+
+## Air Passengers
+
+```{r pass}
+head(AirPassengers)
+air_pass <- as.data.frame(AirPassengers)
+air_pass$month <- rep(1:12, 12)
+air_pass$year <- c(rep(1949, 12), rep(1950, 12), rep(1951, 12), rep(1952, 12), rep(1953, 12), rep(1954, 12), rep(1955, 12), rep(1956, 12), rep(1957, 12), rep(1958, 12), rep(1959, 12), rep(1960, 12))
+air_pass$day <-1
+dmy(paste(air_pass$day, air_pass$month, air_pass$year, sep = "-")) -> air_pass$Date
+air_pass <- air_pass %>% 
+  rename(date = Date, pass1000 = x) %>% 
+  select(date, pass1000) %>% 
+  mutate(pass1000 = as.numeric(pass1000))
+
+
+
+
+
+
+```
+
+```{r}
+ggplot(data = air_pass) + aes(y = pass1000, x=date) +  
+  geom_line() + 
+  geom_smooth() +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y")+ theme(axis.text.x = element_text(angle=90,
+                                   hjust=1)) 
+```
+
+```{r}
+air_pass %>% 
+  mutate(year = year(date))  %>% 
+  ggplot() + 
+  aes(y = pass1000, x=date) + 
+  theme_minimal() +
+  geom_lollipop(point.colour = "steelblue", 
+                colour = "lightgray") +
+  labs(y = "Thousands of Passengers per Month",
+       x = NULL,
+       title = "Growth in US Air Travel") +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y")
+```
+
+## Including Plots
+
+
